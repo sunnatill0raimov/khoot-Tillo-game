@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khoot Clone</title>
+    <!-- Style link -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Script link -->
+     <script type="module" src="home.js" defer></script>
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-container">
+            <div class="logo">Khoot Clone</div>
+            <nav>
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Settings</a>
+            </nav>
+        </div>
+    </div>
+    <div class="main-content">
+        <div id="loadingContainer" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p>Loading questions...</p>
+    </div>
+    <section class="questions-container hidden" id="questionsContainer">
+        <p class="questions hidden">Hello word</p>
+        <div class="answer-container hidden">
+            <div class="answer a"></div>
+            <div class="answer b"></div>
+            <div class="answer c"></div>
+            <div class="answer d"></div>
+        </div>
+    </section>
+    </div>
+
+    <aside class="leaderboard-sidebar">
+        <h2>Top 3 Players</h2>
+        <div class="leaderboard-list">
+            <div class="player">
+                <span class="rank">1</span>
+                <span class="name">Player1</span>
+                <span class="score">10</span>
+            </div>
+            <div class="player">
+                <span class="rank">2</span>
+                <span class="name">Player2</span>
+                <span class="score">8</span>
+            </div>
+            <div class="player">
+                <span class="rank">3</span>
+                <span class="name">Player3</span>
+                <span class="score">7</span>
+            </div>
+
+        </div>
+    </section>
+
+</body>
+</html>
