@@ -54,6 +54,12 @@ body {
 	box-sizing: border-box;
 }
 
+#userForm {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
 .nameInput {
 	padding: 10px;
 	border: 1px solid #ccc;

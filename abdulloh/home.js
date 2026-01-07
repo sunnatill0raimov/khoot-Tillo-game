@@ -36,6 +36,33 @@ const fetchQuestions = async () => {
 
 fetchQuestions();
 
+// Update leaderboard function
+const updateLeaderboard = () => {
+  const leaderboardList = document.querySelector(".leaderboard-list");
+  if (leaderboardList) {
+    const userNames = localStorage.getItem("userName") || 'Player';
+    const userScore = localStorage.getItem("userScore") || 0;
+
+    leaderboardList.innerHTML = `
+      <div class="player">
+        <span class="rank">1</span>
+        <span class="name">${userNames}</span>
+        <span class="score">${userScore}</span>
+      </div>
+      <div class="player">
+        <span class="rank">2</span>
+        <span class="name">Player2</span>
+        <span class="score">8</span>
+      </div>
+      <div class="player">
+        <span class="rank">3</span>
+        <span class="name">Player3</span>
+        <span class="score">7</span>
+      </div>
+    `;
+  }
+};
+
 // 🎯 Bitta savolni chiqarish
 const renderQuestion = () => {
   const item = questions[currentIndex];
@@ -101,6 +128,9 @@ const nextQuestion = () => {
 
 // 🏁 NATIJA
 const showResult = () => {
+  // Save score to localStorage
+  localStorage.setItem("userScore", score);
+
   questionsContainer.innerHTML = `
     <h2>🎉 Quiz tugadi!</h2>
     <p>Natija: <b>${score} / ${questions.length}</b></p>
@@ -112,4 +142,10 @@ const showResult = () => {
     score = 0;
     fetchQuestions();
   });
+
+  // Update leaderboard after quiz completion
+  updateLeaderboard();
 };
+
+// Initialize leaderboard on page load
+updateLeaderboard();
