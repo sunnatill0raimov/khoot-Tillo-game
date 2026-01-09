@@ -1,11 +1,11 @@
-import { setQuestions } from "./state.js";
+import { setQuestions, getSettings } from "./state.js";
 import { renderQuestion } from "./ui.js";
-
-const questionsApi =
-  "https://opentdb.com/api.php?amount=10&category=21&difficulty=easy&type=multiple";
 
 export const fetchQuestions = async () => {
   try {
+    const settings = getSettings();
+    const questionsApi = `https://opentdb.com/api.php?amount=${settings.amount}&category=${settings.category}&difficulty=${settings.difficulty}&type=multiple`;
+
     const res = await fetch(questionsApi);
     const data = await res.json();
 

@@ -192,7 +192,8 @@ nav a:hover {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 800px;
+    width: 100%;
+    max-width: 800px;
     height: 500px;
     margin: 50px auto;
     padding: 2rem;
@@ -222,7 +223,8 @@ nav a:hover {
 }
 
 .questions-container {
-    width: 800px;
+    width: 100%;
+    max-width: 800px;
     height: 500px;
     margin: 50px auto;
     padding: 2rem;
@@ -245,7 +247,7 @@ nav a:hover {
     font-size: 1.5rem;
     color: #495057;
     text-align: center;
-    margin-bottom: 2rem;
+    margin-top: 2rem;
 }
 
 .questions-container button {
@@ -279,6 +281,34 @@ nav a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.timer-container {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    background: #e9ecef;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.timer-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #28a745, #20c997);
+    transition: width 0.1s linear;
+    border-radius: 20px;
+}
+
+.timer-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 .answer-container {
@@ -319,6 +349,12 @@ nav a:hover {
     color: #721c24;
 }
 
+.answer.timeout {
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+    color: #856404;
+}
+
 .answer:hover {
     background: #e7f3ff;
     border-color: #0066cc;
@@ -357,7 +393,7 @@ nav a:hover {
 /* Responsive dizayn */
 @media (max-width: 768px) {
     .navbar {
-        padding: 10px 15px;
+        padding: 10px 10px;
     }
 
     .logo {
@@ -500,8 +536,137 @@ footer {
     color: #ff9800;
 }
 
-/* Responsive */
+/* Comprehensive Mobile Responsive Design */
+@media (max-width: 1024px) {
+    .navbar {
+        padding: 12px 18px;
+    }
+
+    .logo {
+        font-size: 1.6rem;
+    }
+
+    nav a {
+        font-size: 1rem;
+        padding: 9px 14px;
+    }
+
+    .loading-container {
+        margin: 30px auto;
+        padding: 1.5rem;
+        height: 450px;
+    }
+
+    .questions-container {
+        margin: 30px auto;
+        padding: 1.8rem;
+        height: 450px;
+    }
+
+    .questions {
+        font-size: 1.4rem;
+        padding: 1.2rem;
+        min-height: 100px;
+    }
+
+    .answer {
+        padding: 1.2rem;
+        min-height: 70px;
+        font-size: 0.95rem;
+    }
+
+    .settings {
+        padding: 1.8rem;
+        margin: 40px auto;
+    }
+
+    .settings form {
+        gap: 18px;
+    }
+
+    .settings label {
+        font-size: 1rem;
+    }
+
+    .settings input,
+    .settings select {
+        padding: 11px 14px;
+        font-size: 0.95rem;
+    }
+
+    .settings button {
+        padding: 11px 22px;
+        font-size: 0.95rem;
+        min-width: 140px;
+    }
+}
+
 @media (max-width: 768px) {
+    .navbar {
+        padding: 10px 15px;
+    }
+
+    .nav-container {
+        flex-direction: flex;
+        gap: 10px;
+    }
+
+    .logo {
+        font-size: 1.5rem;
+        align-self: flex-start;
+    }
+
+    nav {
+        align-self: stretch;
+        justify-content: center;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+
+    .loading-container {
+        margin: 20px auto;
+        padding: 1.2rem;
+        height: 400px;
+    }
+
+    .loading-container p {
+        font-size: 1.1rem;
+    }
+
+    .questions-container {
+        padding: 1.5rem;
+        height: auto;
+        min-height: 400px;
+    }
+
+    .questions-container h2 {
+        font-size: 2rem;
+    }
+
+    .questions-container p {
+        font-size: 1.3rem;
+    }
+
+    .questions {
+        font-size: 1.25rem;
+        padding: 1rem;
+        min-height: 80px;
+        margin-bottom: 1.5rem;
+    }
+
+    .answer-container {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+
+    .answer {
+        padding: 1rem;
+        min-height: 60px;
+        font-size: 0.9rem;
+    }
+
     .leaderboard-sidebar {
         position: static;
         transform: none;
@@ -511,16 +676,368 @@ footer {
         order: 2;
     }
 
-    .main-content {
-        padding: 10px;
+    .settings {
+        padding: 1.5rem;
+        margin: 30px auto;
+    }
+
+    .settings form {
+        gap: 16px;
+    }
+
+    .settings label {
+        font-size: 1rem;
+    }
+
+    .settings input,
+    .settings select {
+        padding: 10px 13px;
+        font-size: 0.95rem;
+    }
+
+    .settings button {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+        min-width: 130px;
     }
 
     .footer-content {
         flex-direction: column;
         text-align: center;
+        gap: 1.5rem;
     }
 
     .footer-content nav {
         justify-content: center;
     }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 8px 12px;
+        border-radius: 0 0 8px 8px;
+    }
+
+    .logo {
+        font-size: 1.3rem;
+    }
+
+    nav {
+        gap: 3px;
+    }
+
+    nav a {
+        font-size: 0.9rem;
+        padding: 6px 10px;
+    }
+
+    .main-content {
+        padding: 10px;
+    }
+
+    .loading-container {
+        margin: 15px auto;
+        padding: 1rem;
+        height: 350px;
+    }
+
+    .loading-container p {
+        font-size: 1rem;
+    }
+
+    .questions-container {
+        margin: 20px auto;
+        padding: 1.2rem;
+        min-height: 350px;
+    }
+
+    .questions-container h2 {
+        font-size: 1.8rem;
+    }
+
+    .questions-container p {
+        font-size: 1.2rem;
+        margin-top: 1.5rem;
+    }
+
+    .questions-container button {
+        padding: 10px 20px;
+        font-size: 1.1rem;
+    }
+
+    .questions {
+        font-size: 1.1rem;
+        padding: 0.8rem;
+        min-height: 70px;
+        margin-bottom: 1.2rem;
+    }
+
+    .answer {
+        padding: 0.8rem;
+        min-height: 50px;
+        font-size: 0.85rem;
+    }
+
+    .leaderboard-sidebar {
+        margin: 15px auto;
+        padding: 1.2rem;
+        max-width: 350px;
+    }
+
+    .leaderboard-sidebar h2 {
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .player {
+        padding: 0.4rem;
+        font-size: 0.85rem;
+    }
+
+    .rank {
+        font-size: 1.1rem;
+        min-width: 18px;
+    }
+
+    .name {
+        font-size: 0.85rem;
+    }
+
+    .score {
+        font-size: 0.85rem;
+        min-width: 35px;
+    }
+
+    .settings {
+        padding: 1.2rem;
+        margin: 25px auto;
+    }
+
+    .settings form {
+        gap: 14px;
+    }
+
+    .settings label {
+        font-size: 0.95rem;
+    }
+
+    .settings input,
+    .settings select {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+
+    .settings button {
+        padding: 10px 18px;
+        font-size: 0.9rem;
+        min-width: 120px;
+    }
+
+    .footer-content {
+        padding: 0 15px;
+    }
+
+    .footer-content p,
+    .footer-content nav a {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .navbar {
+        padding: 6px 10px;
+    }
+
+    .logo {
+        font-size: 1.2rem;
+    }
+
+    nav a {
+        font-size: 0.8rem;
+        padding: 5px 8px;
+    }
+
+    .main-content {
+        padding: 8px;
+    }
+
+    .loading-container {
+        margin: 10px auto;
+        padding: 0.8rem;
+        height: 300px;
+    }
+
+    .questions-container {
+        margin: 15px auto;
+        padding: 1rem;
+        min-height: 300px;
+    }
+
+    .questions-container h2 {
+        font-size: 1.6rem;
+    }
+
+    .questions-container p {
+        font-size: 1.1rem;
+        margin: 1.2rem;
+    }
+
+    .questions {
+        font-size: 1rem;
+        padding: 0.6rem;
+        min-height: 60px;
+        margin-bottom: 1rem;
+    }
+
+    .answer {
+        padding: 0.6rem;
+        min-height: 45px;
+        font-size: 0.8rem;
+    }
+
+    .leaderboard-sidebar {
+        margin: 10px auto;
+        padding: 1rem;
+        max-width: 320px;
+    }
+
+    .settings {
+        padding: 1rem;
+        margin: 20px auto;
+    }
+
+    .settings form {
+        gap: 12px;
+    }
+
+    .settings label {
+        font-size: 0.9rem;
+    }
+
+    .settings input,
+    .settings select {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+    }
+
+    .settings button {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        min-width: 110px;
+    }
+
+    .leaderboard-sidebar h2 {
+        font-size: 1rem;
+    }
+}
+
+
+/* Settings Page */
+.settings {
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    min-height: 500px;
+    margin: 50px auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.settings form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.settings label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.settings input,
+.settings select {
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #fff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.settings input:focus,
+.settings select:focus {
+    outline: none;
+    border-color: #ff9800;
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+}
+
+.settings select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+.settings button {
+    padding: 12px 24px;
+    background-color: #ff9800;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    align-self: center;
+    min-width: 150px;
+}
+
+.settings button:hover {
+    background-color: #e68900;
+    transform: translateY(-1px);
+}
+
+.settings button:active {
+    background-color: #cc7a00;
+    transform: translateY(0);
+}
+
+.unanswered-list {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.unanswered-item {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background: #fff;
+    border-radius: 6px;
+    border-left: 4px solid #28a745;
+}
+
+.unanswered-item p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    color: #2c3e50;
+}
+
+.correct-answer {
+    color: #28a745;
+    font-weight: bold;
 }

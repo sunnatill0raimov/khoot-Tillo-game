@@ -1,40 +1,20 @@
+import { fetchQuestions } from "./api.js";
+import { questions, currentIndex, score, nextIndex, increaseScore, resetState, unansweredQuestions, settings } from "./state.js";
+import { showLoading, hideLoading } from "./ui.js";
+import { loadSettings } from "./state.js";
+
 const questionsContainer = document.getElementById("questionsContainer");
 const loadingContainer = document.getElementById("loadingContainer");
-const questionsApi = "https://opentdb.com/api.php?amount=10&category=21&difficulty=easy&type=multiple";
 
-let questions = [];
-let currentIndex = 0;
-let score = 0;
+// Load settings on page load
+loadSettings();
 
-// 🔄 LOADING
-const showLoading = () => {
-  loadingContainer.classList.remove("hidden");
-  questionsContainer.classList.add("hidden");
-};
-
-const hideLoading = () => {
-  loadingContainer.classList.add("hidden");
-  questionsContainer.classList.remove("hidden");
-};
-
-const fetchQuestions = async () => {
+// Initialize app
+document.addEventListener("DOMContentLoaded", () => {
   showLoading();
-  try {
-    const res = await fetch(questionsApi);
-    const data = await res.json();
-
-    if (data?.results?.length) {
-      questions = data.results;
-      renderQuestion();
-    }
-  } catch (err) {
-    console.error("API error:", err);
-  } finally {
-    hideLoading();
-  }
-};
-
-fetchQuestions();
+  fetchQuestions();
+  hideLoading();
+});
 
 // Update leaderboard function
 const updateLeaderboard = () => {
@@ -64,6 +44,9 @@ const updateLeaderboard = () => {
 };
 
 // 🎯 Bitta savolni chiqarish
+let timerInterval;
+let timerTimeout;
+
 const renderQuestion = () => {
   const item = questions[currentIndex];
 
@@ -76,10 +59,16 @@ const renderQuestion = () => {
   // 🔀 SHUFFLE (correct doim yuqorida turmasin)
   answersArray.sort(() => Math.random() - 0.5);
 
+  const timerDuration = settings.timer * 1000; // seconds to ms
+
   questionsContainer.innerHTML = `
     <p class="questions">
       ${currentIndex + 1} / ${questions.length}. ${item.question}
     </p>
+    <div class="timer-container">
+      <div class="timer-bar" id="timerBar"></div>
+      <div class="timer-text" id="timerText">${settings.timer}</div>
+    </div>
     <div class="answer-container">
       ${answersArray
         .map((ans) => `<div class="answer">${ans}</div>`)
@@ -89,15 +78,61 @@ const renderQuestion = () => {
   `;
 
   const answers = document.querySelectorAll(".answer");
+  const timerBar = document.getElementById("timerBar");
+  const timerText = document.getElementById("timerText");
+
+  let timeLeft = settings.timer;
+  const updateInterval = 100; // update every 100ms
+  const decrement = updateInterval / 1000;
+
+  // Start timer countdown
+  timerInterval = setInterval(() => {
+    timeLeft -= decrement;
+    const percentage = (timeLeft / settings.timer) * 100;
+    timerBar.style.width = `${Math.max(0, percentage)}%`;
+    timerText.textContent = Math.ceil(timeLeft);
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+    }
+  }, updateInterval);
+
+  // Timeout handler
+  timerTimeout = setTimeout(() => {
+    // Time's up - disable answers
+    answers.forEach((a) => (a.style.pointerEvents = "none"));
+
+    // Mark as unanswered and show correct answer
+    unansweredQuestions.push({
+      question: item.question,
+      correct_answer: item.correct_answer
+    });
+
+    // Show correct answer
+    answers.forEach((a) => {
+      if (a.textContent === item.correct_answer) {
+        a.classList.add("correct");
+      } else {
+        a.classList.add("timeout");
+      }
+    });
+
+    // Move to next after delay
+    setTimeout(nextQuestion, 1000);
+  }, timerDuration);
 
   answers.forEach((answer) => {
     answer.addEventListener("click", () => {
+      // Clear timers
+      clearInterval(timerInterval);
+      clearTimeout(timerTimeout);
+
       // 🔒 qayta bosilmasin
       answers.forEach((a) => (a.style.pointerEvents = "none"));
 
       if (answer.textContent === item.correct_answer) {
         answer.classList.add("correct");
-        score++;
+        increaseScore();
       } else {
         answer.classList.add("wrong");
 
@@ -117,7 +152,7 @@ const renderQuestion = () => {
 
 // 🔁 NEXT QUESTION
 const nextQuestion = () => {
-  currentIndex++;
+  nextIndex();
 
   if (currentIndex < questions.length) {
     renderQuestion();
@@ -131,15 +166,31 @@ const showResult = () => {
   // Save score to localStorage
   localStorage.setItem("userScore", score);
 
-  questionsContainer.innerHTML = `
+  let resultHTML = `
     <h2>🎉 Quiz tugadi!</h2>
     <p>Natija: <b>${score} / ${questions.length}</b></p>
-    <button id="restartBtn">Restart</button>
   `;
 
+  if (unansweredQuestions.length > 0) {
+    resultHTML += `
+      <h3>To'g'ri javoblar (vaqt tugadi):</h3>
+      <div class="unanswered-list">
+        ${unansweredQuestions.map((q, index) => `
+          <div class="unanswered-item">
+            <p><strong>${index + 1}. ${q.question}</strong></p>
+            <p>To'g'ri javob: <span class="correct-answer">${q.correct_answer}</span></p>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  resultHTML += `<button id="restartBtn">Restart</button>`;
+
+  questionsContainer.innerHTML = resultHTML;
+
   document.getElementById("restartBtn").addEventListener("click", () => {
-    currentIndex = 0;
-    score = 0;
+    resetState();
     fetchQuestions();
   });
 
