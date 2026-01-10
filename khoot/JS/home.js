@@ -1,5 +1,4 @@
 // ===================== IMPORT =====================
-// API fetch, state va UI funksiyalarini import qilamiz
 import { fetchQuestions } from "./api.js";
 import { questions, currentIndex, score, nextIndex, increaseScore, resetState, settings } from "./state.js";
 import { showLoading, hideLoading } from "./ui.js";
@@ -7,16 +6,15 @@ import { loadSettings } from "./state.js";
 
 // ===================== DOM ELEMENTS =====================
 const questionsContainer = document.getElementById("questionsContainer");
-const loadingContainer = document.getElementById("loadingContainer");
 
 // ===================== LOAD SETTINGS =====================
-loadSettings(); // LocalStorage dan oldingi sozlamalarni yuklash
+loadSettings();
 
 // ===================== INITIALIZE APP =====================
 document.addEventListener("DOMContentLoaded", async () => {
-  showLoading();          // Loading ekranini ko‘rsatish
-  await fetchQuestions(); // Savollarni API dan olish
-  renderQuestion();       // Birinchi savolni render qilish
+  showLoading();          
+  await fetchQuestions(); 
+  renderQuestion();       
 });
 
 // ===================== LEADERBOARD =====================
