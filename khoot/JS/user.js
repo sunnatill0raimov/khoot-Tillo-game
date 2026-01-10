@@ -8,7 +8,7 @@ userForm?.addEventListener("submit", (e) => {
   if (userName) {
     localStorage.setItem("userName", userName);
     setTimeout(() => {
-      window.location.href = "http://127.0.0.1:5501/khoot/home.html";
+      window.location.href = "home.html";
     }, 1000);
   } else {
     alert("Iltimos, ismingizni kiriting!");

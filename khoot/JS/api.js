@@ -1,5 +1,4 @@
 import { setQuestions, getSettings } from "./state.js";
-import { renderQuestion } from "./ui.js";
 
 export const fetchQuestions = async () => {
   try {
@@ -9,11 +8,9 @@ export const fetchQuestions = async () => {
     const res = await fetch(questionsApi);
     const data = await res.json();
 
-    if (data?.results?.length) {
-      setQuestions(data.results);
-      renderQuestion();
-    }
+    setQuestions(data.results || []);
   } catch (err) {
     console.error("API error:", err);
+    setQuestions([]);
   }
 };

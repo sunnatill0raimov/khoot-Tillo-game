@@ -1,5 +1,5 @@
 import { fetchQuestions } from "./api.js";
-import { questions, currentIndex, score, nextIndex, increaseScore, resetState, unansweredQuestions, settings } from "./state.js";
+import { questions, currentIndex, score, nextIndex, increaseScore, resetState, settings } from "./state.js";
 import { showLoading, hideLoading } from "./ui.js";
 import { loadSettings } from "./state.js";
 
@@ -10,10 +10,10 @@ const loadingContainer = document.getElementById("loadingContainer");
 loadSettings();
 
 // Initialize app
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   showLoading();
-  fetchQuestions();
-  hideLoading();
+  await fetchQuestions();
+  renderQuestion();
 });
 
 // Update leaderboard function
@@ -48,6 +48,13 @@ let timerInterval;
 let timerTimeout;
 
 const renderQuestion = () => {
+  hideLoading();
+
+  if (questions.length === 0) {
+    questionsContainer.innerHTML = '<p class="questions">Savollar yuklanmadi. Qayta urinib ko\'ring.</p>';
+    return;
+  }
+
   const item = questions[currentIndex];
 
   // Javoblarni arrayga yig‘amiz
@@ -67,7 +74,7 @@ const renderQuestion = () => {
     </p>
     <div class="timer-container">
       <div class="timer-bar" id="timerBar"></div>
-      <div class="timer-text" id="timerText">${settings.timer}</div>
+      <div class="timer-text" id="timerText">🕒 ${settings.timer}</div>
     </div>
     <div class="answer-container">
       ${answersArray
@@ -90,7 +97,7 @@ const renderQuestion = () => {
     timeLeft -= decrement;
     const percentage = (timeLeft / settings.timer) * 100;
     timerBar.style.width = `${Math.max(0, percentage)}%`;
-    timerText.textContent = Math.ceil(timeLeft);
+    timerText.textContent = `🕒 ${Math.ceil(timeLeft)}`;
 
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
@@ -102,18 +109,12 @@ const renderQuestion = () => {
     // Time's up - disable answers
     answers.forEach((a) => (a.style.pointerEvents = "none"));
 
-    // Mark as unanswered and show correct answer
-    unansweredQuestions.push({
-      question: item.question,
-      correct_answer: item.correct_answer
-    });
-
-    // Show correct answer
+    // Show correct answer and mark wrong answers
     answers.forEach((a) => {
       if (a.textContent === item.correct_answer) {
         a.classList.add("correct");
       } else {
-        a.classList.add("timeout");
+        a.classList.add("wrong");
       }
     });
 
@@ -166,37 +167,23 @@ const showResult = () => {
   // Save score to localStorage
   localStorage.setItem("userScore", score);
 
-  let resultHTML = `
-    <h2>🎉 Quiz tugadi!</h2>
-    <p>Natija: <b>${score} / ${questions.length}</b></p>
+  questionsContainer.innerHTML = `
+    <div class="result-container">
+      <h2 class="result-title">🎉 Quiz tugadi!</h2>
+      <p class="result-score">Natija: <b>${score} / ${questions.length}</b></p>
+      <button id="restartBtn" class="restart-btn">Qayta o'ynash</button>
+    </div>
   `;
 
-  if (unansweredQuestions.length > 0) {
-    resultHTML += `
-      <h3>To'g'ri javoblar (vaqt tugadi):</h3>
-      <div class="unanswered-list">
-        ${unansweredQuestions.map((q, index) => `
-          <div class="unanswered-item">
-            <p><strong>${index + 1}. ${q.question}</strong></p>
-            <p>To'g'ri javob: <span class="correct-answer">${q.correct_answer}</span></p>
-          </div>
-        `).join('')}
-      </div>
-    `;
-  }
-
-  resultHTML += `<button id="restartBtn">Restart</button>`;
-
-  questionsContainer.innerHTML = resultHTML;
-
-  document.getElementById("restartBtn").addEventListener("click", () => {
+  document.getElementById("restartBtn").addEventListener("click", async () => {
     resetState();
-    fetchQuestions();
+    await fetchQuestions();
+    renderQuestion();
   });
 
   // Update leaderboard after quiz completion
   updateLeaderboard();
 };
 
-// Initialize leaderboard on page load
+ // Initialize leaderboard on page load
 updateLeaderboard();
