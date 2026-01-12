@@ -29,7 +29,6 @@ body {
   background: linear-gradient(135deg, #ffffff, #f8f9fa);
   border-radius: 20px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.8);
   position: relative;
   overflow: hidden;
   text-align: center;
@@ -42,7 +41,7 @@ body {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #28a745, #20c997, #28a745);
+  background:  linear-gradient(135deg, #ff9800, #e68900);
 }
 
 .start-container h2 {
@@ -61,7 +60,7 @@ body {
 
 #startQuizBtn {
   padding: 16px 40px;
-  background: linear-gradient(135deg, #28a745, #20c997);
+  background:  linear-gradient(135deg, #ff9800, #e68900);
   color: #fff;
   font-size: 1.3rem;
   font-weight: 700;
@@ -69,15 +68,13 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   border: none;
-  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 #startQuizBtn:hover {
-  background: linear-gradient(135deg, #218838, #1e7e34);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(40, 167, 69, 0.6);
+ background:  linear-gradient(135deg, #ff9800, #e68900);
+  transform: translateY(-3px)
 }
 
 /* ===================== START / ENTER SCREEN ===================== */
