@@ -6,41 +6,66 @@ import { loadSettings } from "./state.js";
 
 // ===================== DOM ELEMENTS =====================
 const questionsContainer = document.getElementById("questionsContainer");
+const startContainer = document.getElementById("startContainer");
+const startQuizBtn = document.getElementById("startQuizBtn");
+const welcomeMessage = document.getElementById("welcomeMessage");
 
 // ===================== LOAD SETTINGS =====================
 loadSettings();
 
 // ===================== INITIALIZE APP =====================
-document.addEventListener("DOMContentLoaded", async () => {
-  showLoading();          
-  await fetchQuestions(); 
-  renderQuestion();       
+document.addEventListener("DOMContentLoaded", () => {
+  // Get current player name and show welcome message
+  const currentPlayerName = localStorage.getItem("currentPlayer");
+  if (currentPlayerName) {
+    welcomeMessage.textContent = `Salom, ${currentPlayerName}!`;
+  }
+
+  // Add start button event listener
+  startQuizBtn?.addEventListener("click", async () => {
+    // Hide start container, show loading
+    startContainer.classList.add('hidden');
+    document.getElementById('loadingContainer').classList.remove('hidden');
+
+    // Start the quiz
+    await fetchQuestions();
+    renderQuestion();
+  });
 });
 
 // ===================== LEADERBOARD =====================
 const updateLeaderboard = () => {
   const leaderboardList = document.querySelector(".leaderboard-list");
   if (leaderboardList) {
-    const userNames = localStorage.getItem("userName") || 'Player';
-    const userScore = localStorage.getItem("userScore") || 0;
+    // Get players array from localStorage
+    const players = JSON.parse(localStorage.getItem("players")) || [];
 
-    leaderboardList.innerHTML = `
+    // Sort players by score (highest first)
+    const sortedPlayers = players.sort((a, b) => b.score - a.score);
+
+    // Take only top 3 players
+    const topPlayers = sortedPlayers.slice(0, 3);
+
+    // Generate HTML for leaderboard
+    leaderboardList.innerHTML = topPlayers.map((player, index) => `
       <div class="player">
-        <span class="rank">1</span>
-        <span class="name">${userNames}</span>
-        <span class="score">${userScore}</span>
+        <span class="rank">${index + 1}</span>
+        <span class="name">${player.name}</span>
+        <span class="score">${player.score}</span>
       </div>
-      <div class="player">
-        <span class="rank">2</span>
-        <span class="name">Player2</span>
-        <span class="score">8</span>
-      </div>
-      <div class="player">
-        <span class="rank">3</span>
-        <span class="name">Player3</span>
-        <span class="score">7</span>
-      </div>
-    `;
+    `).join('');
+
+    // If fewer than 3 players, show empty slots
+    while (leaderboardList.children.length < 3) {
+      const emptySlot = document.createElement('div');
+      emptySlot.className = 'player';
+      emptySlot.innerHTML = `
+        <span class="rank">${leaderboardList.children.length + 1}</span>
+        <span class="name">—</span>
+        <span class="score">0</span>
+      `;
+      leaderboardList.appendChild(emptySlot);
+    }
   }
 };
 
@@ -142,7 +167,21 @@ const nextQuestion = () => {
 
 // ===================== SHOW RESULT =====================
 const showResult = () => {
-  localStorage.setItem("userScore", score); // Natijani saqlash
+  // Get current player name
+  const currentPlayerName = localStorage.getItem("currentPlayer");
+
+  if (currentPlayerName) {
+    // Get players array and update current player's score (keep highest score)
+    const players = JSON.parse(localStorage.getItem("players")) || [];
+    const playerIndex = players.findIndex(player => player.name === currentPlayerName);
+
+    if (playerIndex !== -1) {
+      // Only update if new score is higher than current score
+      players[playerIndex].score = Math.max(players[playerIndex].score, score);
+      // Save updated players array
+      localStorage.setItem("players", JSON.stringify(players));
+    }
+  }
 
   questionsContainer.innerHTML = `
     <div class="result-container">
@@ -152,10 +191,11 @@ const showResult = () => {
     </div>
   `;
 
-  document.getElementById("restartBtn").addEventListener("click", async () => {
+  document.getElementById("restartBtn").addEventListener("click", () => {
     resetState();        // Quizni reset qilish
-    await fetchQuestions(); // Savollarni qayta yuklash
-    renderQuestion();    // Birinchi savolni render qilish
+    // Hide result, show start container again
+    questionsContainer.classList.add('hidden');
+    startContainer.classList.remove('hidden');
   });
 
   updateLeaderboard(); // Leaderboardni yangilash

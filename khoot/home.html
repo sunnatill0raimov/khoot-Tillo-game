@@ -36,9 +36,17 @@
 
     <!-- ===================== MAIN CONTENT ===================== -->
     <div class="main-content">
+      <!-- ===================== START CONTAINER ===================== -->
+      <!-- Quiz boshlanishdan oldin ko'rinadi -->
+      <div id="startContainer" class="start-container">
+        <h2 id="welcomeMessage">Salom!</h2>
+        <p>Tayyormisiz? Quiz boshlash uchun tugmani bosing.</p>
+        <button id="startQuizBtn">Start Quiz</button>
+      </div>
+
       <!-- ===================== LOADING SCREEN ===================== -->
       <!-- Savollar yuklanayotganda ko‘rinadi -->
-      <div id="loadingContainer" class="loading-container">
+      <div id="loadingContainer" class="loading-container hidden">
         <div class="loading-spinner"></div>
         <p>Loading questions...</p>
       </div>
